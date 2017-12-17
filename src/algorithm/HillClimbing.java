@@ -20,11 +20,11 @@ public class HillClimbing {
     private ArrayList<Action> iterSolution;
     private State iterFinalState;
 
-    public void solve(OptimizationProblem op, HillClimbingSterategy strategy ,boolean maximize){
+    public void solve(OptimizationProblem op, HillClimbingStrategy strategy , boolean maximize){
         solve(op,strategy,maximize,1);
     }
 
-    public void solve(OptimizationProblem op, HillClimbingSterategy strategy ,boolean maximize,int randomRestart){
+    public void solve(OptimizationProblem op, HillClimbingStrategy strategy , boolean maximize, int randomRestart){
         for (int i = 0; i < randomRestart ; i++) {
             if(i != 0) System.out.println("[HC] Random Restart "+i);
             solveUtility(op,strategy,maximize);
@@ -36,7 +36,7 @@ public class HillClimbing {
         System.out.println("[HC] Best Eval : " + op.eval(finalState));
     }
 
-    private void solveUtility(OptimizationProblem op, HillClimbingSterategy strategy ,boolean maximize){
+    private void solveUtility(OptimizationProblem op, HillClimbingStrategy strategy , boolean maximize){
         State currentState = op.initialState();
 
         while(true){
@@ -49,7 +49,7 @@ public class HillClimbing {
                 }
             }
 
-            if(strategy == HillClimbingSterategy.SIMPLE){
+            if(strategy == HillClimbingStrategy.SIMPLE){
 
                 State bestNode = currentState ;
                 int bestVal = op.eval(currentState);
@@ -77,7 +77,7 @@ public class HillClimbing {
                 iterSolution.add(bestAction);
                 System.out.println("[HC] Eval : " + bestVal);
 
-            }else if(strategy == HillClimbingSterategy.FIRST_CHOICE){
+            }else if(strategy == HillClimbingStrategy.FIRST_CHOICE){
 
                 int curval = op.eval(currentState);
                 boolean isFound = false;
@@ -108,7 +108,7 @@ public class HillClimbing {
                     return;
                 }
 
-            }else if(strategy == HillClimbingSterategy.STOCHASTIC){
+            }else if(strategy == HillClimbingStrategy.STOCHASTIC){
 
                 ArrayList<Pair<State,Action>> betterStates = new ArrayList<>();
 

@@ -1,6 +1,6 @@
 package algorithm;
 
-public enum HillClimbingSterategy{
+public enum HillClimbingStrategy {
     SIMPLE,
     STOCHASTIC,
     FIRST_CHOICE

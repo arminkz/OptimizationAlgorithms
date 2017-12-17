@@ -40,27 +40,31 @@ public class HillClimbing {
 
             if(strategy == HillClimbingSterategy.SIMPLE){
 
-                State bestNode = null ;
-                int bestVal = Integer.MIN_VALUE;
+                State bestNode = currentState ;
+                int bestVal = op.eval(currentState);
                 Action bestAction = null;
+                boolean isFound = false;
 
                 for(Pair<State,Action> psa : neighbours){
                     int tval = op.eval(psa.getKey());
-                    if ((maximize && tval > bestVal) || (!maximize && tval < bestVal) || bestNode == null){
+                    if ((maximize && tval > bestVal) || (!maximize && tval < bestVal)){
                         bestNode = psa.getKey();
                         bestVal = tval;
                         bestAction = psa.getValue();
+                        isFound = true;
                     }
                 }
 
-                if(bestNode == null){
+                if(!isFound){
                     //no better node exists final node is current node
                     finalState = currentState;
+                    System.out.println("[HC] Final State Reached !");
                     return;
                 }
 
                 currentState = bestNode;
                 solution.add(bestAction);
+                System.out.println("[HC] Eval : " + bestVal);
 
             }else if(strategy == HillClimbingSterategy.FIRST_CHOICE){
 
@@ -88,6 +92,7 @@ public class HillClimbing {
                 if(!isFound){
                     //No Better State Found Declare as final
                     finalState = currentState;
+                    System.out.println("[HC] Final State Reached !");
                     return;
                 }
 
@@ -111,6 +116,7 @@ public class HillClimbing {
                 if(!isFound){
                     //No Better State Found Declare as final
                     finalState = currentState;
+                    System.out.println("[HC] Final State Reached !");
                     return;
                 }else{
                     Random rnd = new Random();

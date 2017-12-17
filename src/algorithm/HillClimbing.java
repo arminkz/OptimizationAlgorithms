@@ -77,10 +77,11 @@ public class HillClimbing {
                     Pair<State,Action> psa = neighbours.get(index);
 
                     int tval = op.eval(psa.getKey());
-                    if (tval > curval){
+                    if ((maximize && tval > curval) || (!maximize && tval < curval)){
                         //Choose First Better State
                         currentState = psa.getKey();
                         solution.add(psa.getValue());
+                        System.out.println("[HC] Eval : " + tval);
                         isFound = true;
                         break;
                     }
@@ -105,7 +106,7 @@ public class HillClimbing {
 
                 for(Pair<State,Action> psa : neighbours){
                     int tval = op.eval(psa.getKey());
-                    if (tval > curval){
+                    if ((maximize && tval > curval) || (!maximize && tval < curval)){
                         //Add Better State to Array
                         betterStates.add(psa);
                         isFound = true;
@@ -124,6 +125,7 @@ public class HillClimbing {
                     Pair<State,Action> s = betterStates.get(index);
                     currentState = s.getKey();
                     solution.add(s.getValue());
+                    System.out.println("[HC] Eval : " + op.eval(s.getKey()));
                 }
 
             }else{

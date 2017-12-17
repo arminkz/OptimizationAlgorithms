@@ -9,23 +9,34 @@ import java.util.Random;
 public class HillClimbing {
 
     public HillClimbing(){
-        solution = new ArrayList<>();
-        finalState = null;
+        iterSolution = new ArrayList<>();
+        iterFinalState = null;
     }
 
     private ArrayList<Action> solution;
-    public ArrayList<Action> getSolution(){
-        return solution;
-    }
-
     private State finalState;
-    public State getFinalState(){
-        return finalState;
-    }
 
+    //Data Structures used to store results of one iteration
+    private ArrayList<Action> iterSolution;
+    private State iterFinalState;
 
     public void solve(OptimizationProblem op, HillClimbingSterategy strategy ,boolean maximize){
+        solve(op,strategy,maximize,1);
+    }
 
+    public void solve(OptimizationProblem op, HillClimbingSterategy strategy ,boolean maximize,int randomRestart){
+        for (int i = 0; i < randomRestart ; i++) {
+            if(i != 0) System.out.println("[HC] Random Restart "+i);
+            solveUtility(op,strategy,maximize);
+            if(finalState == null || (maximize && op.eval(iterFinalState)>op.eval(finalState)) || (!maximize && op.eval(iterFinalState) < op.eval(finalState))){
+                finalState = iterFinalState;
+                solution = iterSolution;
+            }
+        }
+        System.out.println("[HC] Best Eval : " + op.eval(finalState));
+    }
+
+    private void solveUtility(OptimizationProblem op, HillClimbingSterategy strategy ,boolean maximize){
         State currentState = op.initialState();
 
         while(true){
@@ -57,13 +68,13 @@ public class HillClimbing {
 
                 if(!isFound){
                     //no better node exists final node is current node
-                    finalState = currentState;
+                    iterFinalState = currentState;
                     System.out.println("[HC] Final State Reached !");
                     return;
                 }
 
                 currentState = bestNode;
-                solution.add(bestAction);
+                iterSolution.add(bestAction);
                 System.out.println("[HC] Eval : " + bestVal);
 
             }else if(strategy == HillClimbingSterategy.FIRST_CHOICE){
@@ -80,7 +91,7 @@ public class HillClimbing {
                     if ((maximize && tval > curval) || (!maximize && tval < curval)){
                         //Choose First Better State
                         currentState = psa.getKey();
-                        solution.add(psa.getValue());
+                        iterSolution.add(psa.getValue());
                         System.out.println("[HC] Eval : " + tval);
                         isFound = true;
                         break;
@@ -92,7 +103,7 @@ public class HillClimbing {
 
                 if(!isFound){
                     //No Better State Found Declare as final
-                    finalState = currentState;
+                    iterFinalState = currentState;
                     System.out.println("[HC] Final State Reached !");
                     return;
                 }
@@ -116,7 +127,7 @@ public class HillClimbing {
 
                 if(!isFound){
                     //No Better State Found Declare as final
-                    finalState = currentState;
+                    iterFinalState = currentState;
                     System.out.println("[HC] Final State Reached !");
                     return;
                 }else{
@@ -124,7 +135,7 @@ public class HillClimbing {
                     int index = rnd.nextInt(betterStates.size());
                     Pair<State,Action> s = betterStates.get(index);
                     currentState = s.getKey();
-                    solution.add(s.getValue());
+                    iterSolution.add(s.getValue());
                     System.out.println("[HC] Eval : " + op.eval(s.getKey()));
                 }
 

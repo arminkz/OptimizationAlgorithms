@@ -16,12 +16,17 @@ public class SimulatedAnnealing {
     private ArrayList<Action> solution;
     private State finalState;
 
-    private void solve(OptimizationProblem op, SimulatedAnnealingStrategy strategy , boolean maximize , int kmax){
+    public void solve(OptimizationProblem op, SimulatedAnnealingStrategy strategy , boolean maximize){
 
         State currentState = op.initialState();
-        int k=0;
 
-        while(k<kmax){
+        //Set initial temp
+        double temp = 100000;
+
+        //Cooling rate
+        double coolingRate = 0.003;
+
+        while(temp > 1){
 
             //Get Neighbours
             ArrayList<Pair<State,Action>> neighbours = new ArrayList<>();
@@ -31,48 +36,75 @@ public class SimulatedAnnealing {
                 }
             }
 
+            int curval = op.eval(currentState);
+            //boolean isFound = false;
+
+            Random rnd = new Random();
+            int index = rnd.nextInt(neighbours.size());
+            Pair<State,Action> psa = neighbours.get(index);
+
+            int tval = op.eval(psa.getKey());
+            double p = acceptanceProbability(curval,tval,temp,maximize);
+            double d = rnd.nextDouble();
+            //System.out.println(p + " ! " + d);
+            if(p > d){
+                currentState = psa.getKey();
+                solution.add(psa.getValue());
+                System.out.println("[SA] Eval : " + tval);
+            }
+
             if(strategy == SimulatedAnnealingStrategy.LINEAR_TEMPERATURE){
 
-                int curval = op.eval(currentState);
-                //boolean isFound = false;
+                //cool system
+                temp *= 1 - coolingRate;
 
-                int temp = 100 - ((k / kmax) * 100);
 
-                Random rnd = new Random();
-                int index = rnd.nextInt(neighbours.size());
-                Pair<State,Action> psa = neighbours.get(index);
-
-                int tval = op.eval(psa.getKey());
-                if ((maximize && tval > curval) || (!maximize && tval < curval)){
+                /*if ((maximize && tval > curval) || (!maximize && tval < curval)){
                     //Choose Better State
                     currentState = psa.getKey();
                     solution.add(psa.getValue());
                     System.out.println("[HC] Eval : " + tval);
-                    //isFound = true;
-                    break;
                 }else{
                     //go to state
-                    int p = rnd.nextInt(100);
+                    int p = rnd.nextInt(1000);
                     if(temp > p){
-                        currentState = psa.getKey();
-                        solution.add(psa.getValue());
+
                         System.out.println("[HC] Eval : " + tval + " (Jump)");
                     }else{
                         //do nothing
                     }
-                }
+                }*/
 
-                k++;
+                //remove visited
+                //neighbours.remove(index);
+
 
             }else{
 
                 System.err.println("Invalid Strategy !");
-
+                return;
             }
-
 
         }
 
+    }
+
+    private static double acceptanceProbability(int currentDistance, int newDistance, double temperature , boolean maximize) {
+        if(!maximize){
+            // If the new solution is better, accept it
+            if (newDistance < currentDistance) {
+                return 1.0;
+            }
+            // If the new solution is worse, calculate an acceptance probability
+            return Math.exp((currentDistance - newDistance) / temperature);
+        }else{
+            // If the new solution is better, accept it
+            if (newDistance > currentDistance) {
+                return 1.0;
+            }
+            // If the new solution is worse, calculate an acceptance probability
+            return Math.exp((newDistance - currentDistance) / temperature);
+        }
     }
 
 }

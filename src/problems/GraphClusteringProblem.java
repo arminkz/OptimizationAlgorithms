@@ -69,6 +69,14 @@ public class GraphClusteringProblem implements OptimizationProblem {
                     break;
                 }
             }
+        }else{
+            for (int i = 0; i < newState.cluster2.size(); i++) {
+                if(newState.cluster2.get(i) == gca.vertex){
+                    newState.cluster2.remove(i);
+                    newState.cluster1.add(gca.vertex);
+                    break;
+                }
+            }
         }
 
         ArrayList<State> singleState = new ArrayList<>();
@@ -101,10 +109,10 @@ public class GraphClusteringProblem implements OptimizationProblem {
                     //determine cluster of node j
                     int clusterJ = 0;
                     for(Integer cic : gcs.cluster1){
-                        if(cic == i) clusterJ = 1;
+                        if(cic == j) clusterJ = 1;
                     }
                     for(Integer cic : gcs.cluster2){
-                        if(cic == i) clusterJ = 2;
+                        if(cic == j) clusterJ = 2;
                     }
 
                     if(clusterI != clusterJ) connectionCost++;
@@ -130,6 +138,18 @@ class GraphClusterState implements State{
         return false;
     }
 
+    @Override
+    public String toString() {
+        String str = "C1 :\n";
+        for(Integer i : cluster1){
+            str += " " + i;
+        }
+        str += "C2 :\n";
+        for(Integer i : cluster2){
+            str += " " + i;
+        }
+        return str;
+    }
 }
 
 class GraphClusterAction implements Action{

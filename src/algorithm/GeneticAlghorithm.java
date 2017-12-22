@@ -8,10 +8,10 @@ import java.util.Random;
 public class GeneticAlghorithm {
 
     private int population_size;
-    private int mutation_rate;
-    private int crossover_rate;
+    private double mutation_rate;
+    private double crossover_rate;
 
-    public GeneticAlghorithm(int population_size, int crossover_rate , int mutation_rate){
+    public GeneticAlghorithm(int population_size, double crossover_rate , double mutation_rate){
         this.population_size = population_size;
         this.mutation_rate = mutation_rate;
         this.crossover_rate = crossover_rate;

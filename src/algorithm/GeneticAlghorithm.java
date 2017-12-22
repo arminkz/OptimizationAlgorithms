@@ -29,12 +29,20 @@ public class GeneticAlghorithm {
 
             //evaluate
             double fitness_sum = 0;
+            double bestFitness = 0;
+            double worstFitness = Double.MAX_VALUE;
             ArrayList<Pair<State, Double>> populationFitness = new ArrayList<>();
             for (State p : population) {
-                populationFitness.add(new Pair<>(p, gp.fitness(p)));
-                fitness_sum += gp.fitness(p);
+                double fitness = gp.fitness(p);
+                populationFitness.add(new Pair<>(p, fitness));
+                fitness_sum += fitness;
+                if(fitness < worstFitness) worstFitness = fitness;
+                if(fitness > bestFitness) bestFitness = fitness;
             }
+            double avgFitness = fitness_sum / population.size();
 
+            //Log Fitness Data
+            //System.out.println(bestFitness + "  " + avgFitness + "  " + worstFitness);
 
             //calculate cumulative probability for RWS
             double cumulativeP[] = new double[population.size() + 1];

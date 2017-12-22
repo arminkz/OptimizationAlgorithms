@@ -41,7 +41,7 @@ public class MathematicalEqualityProblem implements GeneticProblem {
     public double fitness(State s) {
         MathematicalEqualityState mes = (MathematicalEqualityState)s;
         double val = (a*mes.C[0] + b*mes.C[1] + c*mes.C[2] + d*mes.C[3]) - f;
-        return 1 / 1 + val;
+        return 1 / (1 + val);
     }
 
     @Override

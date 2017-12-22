@@ -32,7 +32,7 @@ public class MainDriver {
         GeneticAlghorithm GA = new GeneticAlghorithm(20,0.2,0.1);
         GA.solve(ME,10000);
         System.out.println(GA.finalState.toString());
-
+        System.out.println("Fitness : " + ME.fitness(GA.finalState));
     }
 
 }

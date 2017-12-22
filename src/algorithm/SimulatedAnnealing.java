@@ -8,13 +8,17 @@ import java.util.Random;
 
 public class SimulatedAnnealing {
 
-    public SimulatedAnnealing(){
+    //Cooling rate
+    double coolingRate = 0.003;
+
+    public SimulatedAnnealing(double coolingRate){
         solution = new ArrayList<>();
         finalState = null;
+        this.coolingRate = coolingRate;
     }
 
     private ArrayList<Action> solution;
-    private State finalState;
+    public State finalState;
 
     public void solve(OptimizationProblem op, SimulatedAnnealingStrategy strategy , boolean maximize){
 
@@ -22,9 +26,6 @@ public class SimulatedAnnealing {
 
         //Set initial temp
         double temp = 100000;
-
-        //Cooling rate
-        double coolingRate = 0.003;
 
         while(temp > 1){
 
@@ -53,37 +54,26 @@ public class SimulatedAnnealing {
                 System.out.println("[SA] Eval : " + tval);
             }
 
-            if(strategy == SimulatedAnnealingStrategy.LINEAR_TEMPERATURE){
+            if(strategy == SimulatedAnnealingStrategy.EXPOTENTIAL) {
 
                 //cool system
                 temp *= 1 - coolingRate;
 
+            }else if(strategy == SimulatedAnnealingStrategy.LINEAR_TEMPERATURE) {
 
-                /*if ((maximize && tval > curval) || (!maximize && tval < curval)){
-                    //Choose Better State
-                    currentState = psa.getKey();
-                    solution.add(psa.getValue());
-                    System.out.println("[HC] Eval : " + tval);
-                }else{
-                    //go to state
-                    int p = rnd.nextInt(1000);
-                    if(temp > p){
+                temp -= coolingRate;
 
-                        System.out.println("[HC] Eval : " + tval + " (Jump)");
-                    }else{
-                        //do nothing
-                    }
-                }*/
+            }else if(strategy == SimulatedAnnealingStrategy.RANDOM_REDUCE){
 
-                //remove visited
-                //neighbours.remove(index);
-
+                temp -= rnd.nextDouble() * coolingRate;
 
             }else{
 
                 System.err.println("Invalid Strategy !");
                 return;
             }
+
+            finalState = currentState;
 
         }
 

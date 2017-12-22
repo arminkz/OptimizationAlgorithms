@@ -1,5 +1,7 @@
 package algorithm;
 
 public enum SimulatedAnnealingStrategy {
-    LINEAR_TEMPERATURE
+    LINEAR_TEMPERATURE,
+    EXPOTENTIAL,
+    RANDOM_REDUCE
 }

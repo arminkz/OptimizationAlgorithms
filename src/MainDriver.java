@@ -16,6 +16,7 @@ public class MainDriver {
         SA.solve(Q,SimulatedAnnealingStrategy.LINEAR_TEMPERATURE,false,100000);
         */
 
+        /*
         int[][] graph = {{0,1,1,0,0,0},
                          {1,0,1,0,0,0},
                          {1,1,0,0,0,0},
@@ -25,6 +26,13 @@ public class MainDriver {
         GraphClusteringProblem GC = new GraphClusteringProblem(graph,6);
         SimulatedAnnealing SA = new SimulatedAnnealing();
         SA.solve(GC,SimulatedAnnealingStrategy.LINEAR_TEMPERATURE,false);
+        */
+
+        MathematicalEqualityProblem ME = new MathematicalEqualityProblem(1,2,3,4,30,30);
+        GeneticAlghorithm GA = new GeneticAlghorithm(20,0.2,0.1);
+        GA.solve(ME,10000);
+        System.out.println(GA.finalState.toString());
+
     }
 
 }

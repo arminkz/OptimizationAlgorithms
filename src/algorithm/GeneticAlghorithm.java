@@ -17,7 +17,7 @@ public class GeneticAlghorithm {
         this.crossover_rate = crossover_rate;
     }
 
-    private State finalState;
+    public State finalState;
 
     public void solve(GeneticProblem gp,int generations){
 
@@ -91,6 +91,7 @@ public class GeneticAlghorithm {
 
             //update population
             population = new_population;
+            k++;
         }
 
         //after k iterations return answer
@@ -105,6 +106,7 @@ public class GeneticAlghorithm {
         }
 
         finalState = bestState;
+        System.out.println("[GA] Final State Reached !");
     }
 
 
